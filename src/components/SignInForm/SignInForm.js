@@ -4,13 +4,13 @@ import { NotificationManager } from 'react-notifications';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { signIn } from '../../actions/authActions';
-import { Grid, Button, TextField, withStyles } from '@material-ui/core';
+import { Grid, Button, TextField, Typography, withStyles } from '@material-ui/core';
 
 const styles = {
   gridContainer: {
       display: 'flex',
       justifyContent: 'center',
-      width: '80%',
+      width: '75%',
       margin: '0 auto'
   },
   btn: {
@@ -55,7 +55,6 @@ export class SignInForm extends Component {
 
 onSubmit = async e => {
     e.preventDefault();
-    console.log(this.state.values);
     this.setState({ loading: true });
 
     const { values } = this.state;
@@ -83,14 +82,17 @@ onSubmit = async e => {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <Grid container spacing={2} justify="center">
+        <Grid className={classes.gridContainer} container spacing={2} justify="center">
+          <Grid item xs={12}>
+            <Typography variant="h3" align="center">Sign in</Typography>
+          </Grid>
           <Grid item xs={12}>
               {this.renderField('email', 'E-mail', { required: true, type: 'email' })}
           </Grid>
           <Grid item xs={12}>
               {this.renderField('password', 'Password', { required: true, type: 'password' })}
           </Grid>
-          <Button type="submit" variant="contained">Sign in</Button>
+          <Button className={classes.btn} type="submit" variant="contained">Sign in</Button>
         </Grid>
       </form>
     );
