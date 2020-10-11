@@ -1,24 +1,27 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import { NotificationManager } from 'react-notifications';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import axios from 'axios';
+import {
+  Grid, Button, TextField, Typography, withStyles,
+} from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
+import { NotificationManager } from 'react-notifications';
 import { signIn } from '../../actions/authActions';
-import { Grid, Button, TextField, Typography, withStyles } from '@material-ui/core';
 
 const styles = {
   gridContainer: {
-      display: 'flex',
-      justifyContent: 'center',
-      width: '75%',
-      margin: '0 auto'
+    display: 'flex',
+    justifyContent: 'center',
+    width: '75%',
+    margin: '0 auto',
   },
   btn: {
-      marginTop: '2.5em'
-  }
-}
+    marginTop: '1em',
+  },
+};
 
-export class SignInForm extends Component {
+class SignInForm extends Component {
   constructor(props) {
     super(props);
 
@@ -41,19 +44,17 @@ export class SignInForm extends Component {
     }));
   }
 
-  renderField = (fieldName, label, props = {}) => {
-    return (
-      <TextField
-        onChange={this.onFieldChange(fieldName)}
-        variant="standard"
-        label={label}
-        fullWidth
-        {...props}
-      />
-    );
-  }
+  renderField = (fieldName, label, props = {}) => (
+    <TextField
+      onChange={this.onFieldChange(fieldName)}
+      variant="standard"
+      label={label}
+      fullWidth
+      {...props}
+    />
+  );
 
-onSubmit = async e => {
+  onSubmit = async e => {
     e.preventDefault();
     this.setState({ loading: true });
 
@@ -62,14 +63,15 @@ onSubmit = async e => {
     let response;
 
     try {
-        response = await axios.post('/user/auth', values);
-        this.setState({ loading: false });
+      response = await axios.post('/user/auth', values);
+      this.setState({ loading: false });
     } catch (err) {
-        NotificationManager.error(err.response.data.message, `Error ${err.response.data.code}`, 5000);
-        this.setState({ loading: false });
-        return null;
+      NotificationManager.error(err.response.data.message, `Error ${err.response.data.code}`, 5000);
+      this.setState({ loading: false });
+      return null;
     }
 
+    // eslint-disable-next-line no-shadow
     const { history, signIn } = this.props;
 
     signIn(response.data);
@@ -84,13 +86,13 @@ onSubmit = async e => {
       <form onSubmit={this.onSubmit}>
         <Grid className={classes.gridContainer} container spacing={2} justify="center">
           <Grid item xs={12}>
-            <Typography variant="h3" align="center">Sign in</Typography>
+            <Typography variant="h4" align="center">Sign in</Typography>
           </Grid>
           <Grid item xs={12}>
-              {this.renderField('email', 'E-mail', { required: true, type: 'email' })}
+            {this.renderField('email', 'E-mail', { required: true, type: 'email' })}
           </Grid>
           <Grid item xs={12}>
-              {this.renderField('password', 'Password', { required: true, type: 'password' })}
+            {this.renderField('password', 'Password', { required: true, type: 'password' })}
           </Grid>
           <Button className={classes.btn} type="submit" variant="contained">Sign in</Button>
         </Grid>
@@ -98,5 +100,14 @@ onSubmit = async e => {
     );
   }
 }
+
+SignInForm.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  classes: PropTypes.object.isRequired,
+  signIn: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    replace: PropTypes.func,
+  }).isRequired,
+};
 
 export default withRouter(connect(null, { signIn })(withStyles(styles)(SignInForm)));

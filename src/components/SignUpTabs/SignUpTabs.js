@@ -1,11 +1,16 @@
+/* eslint-disable react/require-default-props */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AppBar, Paper, Tabs, Tab, Typography, Box, makeStyles } from '@material-ui/core';
+import {
+  AppBar, Paper, Tabs, Tab, Box, makeStyles,
+} from '@material-ui/core';
 import JoinFamilyForm from '../JoinFamilyForm/JoinFamilyForm';
 import RegisterFamilyForm from '../RegisterFamilyForm/RegisterFamilyForm';
 
 function TabPanel(props) {
-  const { children, value, index, ...other } = props;
+  const {
+    children, value, index, ...other
+  } = props;
 
   return (
     <div
@@ -26,8 +31,8 @@ function TabPanel(props) {
 
 TabPanel.propTypes = {
   children: PropTypes.node,
-  index: PropTypes.any.isRequired,
-  value: PropTypes.any.isRequired,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
 };
 
 function a11yProps(index) {
@@ -37,7 +42,7 @@ function a11yProps(index) {
   };
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   root: {
     flexGrow: 1,
     backgroundColor: '#fff',
@@ -55,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
   indicator: {
     background: '#7556ee',
   },
-}));
+});
 
 function SignUpTabs() {
   const classes = useStyles();
@@ -68,10 +73,10 @@ function SignUpTabs() {
   return (
     <Paper className={classes.root}>
       <AppBar className={classes.appBar} position="static">
-        <Tabs 
+        <Tabs
           classes={{ indicator: classes.indicator }}
-          value={value} 
-          onChange={handleChange} 
+          value={value}
+          onChange={handleChange}
         >
           <Tab classes={{ root: classes.tab }} label="Sign up & register family" {...a11yProps(0)} />
           <Tab classes={{ root: classes.tab }} label="Sign up using family id" {...a11yProps(1)} />
