@@ -30,4 +30,4 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./build
       env:
-        REACT_API_URL: https://family-spendings.azurewebsites.net/
+        REACT_APP_API_URL: https://family-spendings.azurewebsites.net/
