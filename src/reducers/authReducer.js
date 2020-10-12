@@ -1,10 +1,10 @@
 import {
-  USER_LOADING, USER_LOADED, LOGIN_SUCCESS, LOGOUT_SUCCESS,
+  USER_LOADING, USER_LOADED, USER_NOT_LOADED, LOGIN_SUCCESS, LOGOUT_SUCCESS,
 } from '../actions/types';
 
 const initialState = {
   token: localStorage.getItem('token'),
-  isAuthenticated: null,
+  isAuthenticated: false,
   user: null,
   isLoading: false,
 };
@@ -23,6 +23,11 @@ export default function (state = initialState, action) {
         isAuthenticated: true,
         isLoading: false,
         user: action.payload,
+      };
+    case USER_NOT_LOADED:
+      return {
+        ...state,
+        isLoading: false,
       };
     case LOGIN_SUCCESS:
       localStorage.setItem('token', action.payload.token);

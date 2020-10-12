@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {
-  USER_LOADING, USER_LOADED, LOGIN_SUCCESS, LOGOUT_SUCCESS,
+  USER_LOADING, USER_LOADED, USER_NOT_LOADED, LOGIN_SUCCESS, LOGOUT_SUCCESS,
 } from './types';
 
 export const tokenConfig = getState => {
@@ -19,13 +19,16 @@ export const tokenConfig = getState => {
   return config;
 };
 
-export const loadUser = () => async (dispatch, getState) => {
+export const loadUser = () => (dispatch, getState) => {
   dispatch({ type: USER_LOADING });
 
-  await axios.get('/current', tokenConfig(getState))
+  axios.get('/user/current', tokenConfig(getState))
     .then(res => dispatch({
       type: USER_LOADED,
       payload: res.data,
+    }))
+    .catch(() => dispatch({
+      type: USER_NOT_LOADED,
     }));
 };
 

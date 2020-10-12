@@ -1,8 +1,9 @@
+/* eslint-disable no-shadow */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  AppBar, Toolbar, Typography, IconButton, Button, makeStyles, Drawer,
+  AppBar, Toolbar, Typography, IconButton, makeStyles, Drawer,
   List, Divider, ListItem, ListItemText, ListItemIcon, useTheme,
 } from '@material-ui/core';
 import clsx from 'clsx';
@@ -10,6 +11,8 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import LocalAtmIcon from '@material-ui/icons/LocalAtm';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import DashboardIcon from '@material-ui/icons/Dashboard';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Link, withRouter } from 'react-router-dom';
 import { logout } from '../../actions/authActions';
@@ -90,10 +93,17 @@ const useStyles = makeStyles((theme) => ({
     color: '#707070',
     marginLeft: '1em',
   },
+  list: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: '100%',
+  },
 }));
 
-// eslint-disable-next-line no-shadow
-const Navbar = ({ user, logout, history }) => {
+const Navbar = ({
+  user, family, logout, history,
+}) => {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -124,24 +134,39 @@ const Navbar = ({ user, logout, history }) => {
       >
         <Toolbar>
           {user && (
-            <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-              <MenuIcon
-                onClick={handleDrawerOpen}
-              />
+            <IconButton
+              edge="start"
+              className={classes.menuButton}
+              onClick={handleDrawerOpen}
+              color="inherit"
+              aria-label="menu"
+            >
+              <MenuIcon />
             </IconButton>
           )}
           <Typography variant="h6" className={classes.title}>
             Family Spendings
           </Typography>
-          {user
+          {user && family
             ? (
               <>
-                <Typography>
-                  Logged as
-                  {' '}
-                  {user.name}
-                </Typography>
-                <Button className={classes.btn} onClick={logout} variant="outlined" color="inherit">LOGOUT</Button>
+                <div style={{ display: 'flex', flexDirection: 'column', marginRight: '2em' }}>
+                  <Typography style={{ fontSize: '.6rem' }}>
+                    Family budget
+                  </Typography>
+                  <Typography>
+                    {family.budget}
+                    $
+                  </Typography>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', marginRight: '1em' }}>
+                  <Typography style={{ fontSize: '.6rem' }}>
+                    Logged as
+                  </Typography>
+                  <Typography>
+                    {user.name}
+                  </Typography>
+                </div>
               </>
             )
             : (
@@ -168,33 +193,46 @@ const Navbar = ({ user, logout, history }) => {
             </IconButton>
           </div>
           <Divider />
-          <List>
+          <List className={classes.list}>
             <div>
-              <Typography className={classes.adminPanelLabel} variant="overline">
-                User Panel
-              </Typography>
+              <div>
+                <Typography className={classes.adminPanelLabel} variant="overline">
+                  User Panel
+                </Typography>
+              </div>
+              <Divider />
+              <ListItem button key="dashboard" onClick={() => navigateTo('/dashboard')}>
+                <ListItemIcon><DashboardIcon /></ListItemIcon>
+                <ListItemText primary="Dashboard" />
+              </ListItem>
+              <ListItem button key="add-spending" onClick={() => navigateTo('/add-spending')}>
+                <ListItemIcon><AddShoppingCartIcon /></ListItemIcon>
+                <ListItemText primary="Add spending" />
+              </ListItem>
+              {user.isAdmin && (
+                <>
+                  <List>
+                    <div>
+                      <Typography className={classes.adminPanelLabel} variant="overline">
+                        Admin Panel
+                      </Typography>
+                    </div>
+                    <Divider />
+                    <ListItem button key="add-fund" onClick={() => navigateTo('/add-fund')}>
+                      <ListItemIcon><LocalAtmIcon /></ListItemIcon>
+                      <ListItemText primary="Add fund" />
+                    </ListItem>
+                  </List>
+                </>
+              )}
             </div>
-            <Divider />
-            <ListItem button key="add-spending" onClick={() => navigateTo('/add-spending')}>
-              <ListItemIcon><AddShoppingCartIcon /></ListItemIcon>
-              <ListItemText primary="Add spending" />
-            </ListItem>
-            {user.isAdmin && (
-              <>
-                <List>
-                  <div>
-                    <Typography className={classes.adminPanelLabel} variant="overline">
-                      Admin Panel
-                    </Typography>
-                  </div>
-                  <Divider />
-                  <ListItem button key="add-fund" onClick={() => navigateTo('/add-fund')}>
-                    <ListItemIcon><LocalAtmIcon /></ListItemIcon>
-                    <ListItemText primary="Add fund" />
-                  </ListItem>
-                </List>
-              </>
-            )}
+            <div>
+              <Divider />
+              <ListItem button key="logout" onClick={() => logout()}>
+                <ListItemIcon><ExitToAppIcon /></ListItemIcon>
+                <ListItemText primary="Logout" />
+              </ListItem>
+            </div>
           </List>
         </Drawer>
       )}
@@ -204,20 +242,24 @@ const Navbar = ({ user, logout, history }) => {
 
 Navbar.propTypes = {
   logout: PropTypes.func.isRequired,
+  user: PropTypes.shape({
+    name: PropTypes.string,
+    isAdmin: PropTypes.bool,
+  }).isRequired,
+  family: PropTypes.shape({
+    budget: PropTypes.number,
+  }).isRequired,
   history: PropTypes.shape({
     push: PropTypes.func,
     location: PropTypes.shape({
       pathname: PropTypes.string,
     }).isRequired,
   }).isRequired,
-  user: PropTypes.shape({
-    name: PropTypes.string,
-    isAdmin: PropTypes.bool,
-  }).isRequired,
 };
 
 const mapStateToProps = state => ({
   user: state.auth.user,
+  family: state.family.family,
 });
 
 export default withRouter(

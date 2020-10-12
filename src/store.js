@@ -6,13 +6,16 @@ const initialState = {};
 
 const middleware = [thunk];
 
+const composeEnhancers = typeof window === 'object'
+  && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+  ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+  }) : compose;
+
 const store = createStore(
   rootReducer,
   initialState,
-  compose(
+  composeEnhancers(
     applyMiddleware(...middleware),
-    // eslint-disable-next-line no-underscore-dangle
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
   ),
 );
 

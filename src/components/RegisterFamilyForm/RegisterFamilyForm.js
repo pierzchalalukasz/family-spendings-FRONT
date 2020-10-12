@@ -127,6 +127,7 @@ class RegisterFamilyForm extends Component {
 }
 
 RegisterFamilyForm.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
   classes: PropTypes.object.isRequired,
   history: PropTypes.shape({
     replace: PropTypes.func,
