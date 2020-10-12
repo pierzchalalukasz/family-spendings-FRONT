@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import {
   Grid, TextField, Typography, Button, withStyles,
 } from '@material-ui/core';
 import { NotificationManager } from 'react-notifications';
+import axios from '../../apiClient';
 
 const styles = {
   gridContainer: {

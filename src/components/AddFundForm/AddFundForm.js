@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import {
   Grid, Paper, Button, TextField, Typography, withStyles,
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { NotificationManager } from 'react-notifications';
+import axios from '../../apiClient';
 import store from '../../store';
 import { getFamilyBudget } from '../../actions/familyActions';
 import { tokenConfig } from '../../actions/authActions';

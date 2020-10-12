@@ -240,12 +240,16 @@ const Navbar = ({
   );
 };
 
+Navbar.defaultProps = {
+  user: null,
+};
+
 Navbar.propTypes = {
   logout: PropTypes.func.isRequired,
   user: PropTypes.shape({
     name: PropTypes.string,
     isAdmin: PropTypes.bool,
-  }).isRequired,
+  }),
   family: PropTypes.shape({
     budget: PropTypes.number,
   }).isRequired,

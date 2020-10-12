@@ -29,7 +29,7 @@ export default function (state = initialState, action) {
         ...state,
         family: {
           ...state.family,
-          budget: action.payload.budget,
+          budget: action.payload,
         },
       };
     }

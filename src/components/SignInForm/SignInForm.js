@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import axios from 'axios';
 import {
   Grid, Button, TextField, Typography, withStyles,
 } from '@material-ui/core';
 import { withRouter } from 'react-router-dom';
 import { NotificationManager } from 'react-notifications';
+import axios from '../../apiClient';
 import { signIn } from '../../actions/authActions';
 
 const styles = {

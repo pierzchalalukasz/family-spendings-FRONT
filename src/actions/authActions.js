@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../apiClient';
 import {
   USER_LOADING, USER_LOADED, USER_NOT_LOADED, LOGIN_SUCCESS, LOGOUT_SUCCESS,
 } from './types';
